@@ -34,6 +34,18 @@ def hitung_total(data_panen):
     """Menghitung total keseluruhan hasil panen."""
     return sum(item["jumlah"] for item in data_panen)
  
+def hitung_diskon(total, persen_diskon):
+    """
+    Menghitung nilai diskon dan total setelah diskon.
+    Mengembalikan tuple (nilai_diskon, total_setelah_diskon).
+    """
+    if persen_diskon < 0 or persen_diskon > 100:
+        raise ValueError("Persentase diskon harus di antara 0 dan 100.")
+ 
+    nilai_diskon = total * (persen_diskon / 100)
+    total_setelah_diskon = total - nilai_diskon
+    return nilai_diskon, total_setelah_diskon
+
  
 def tampilkan_ringkasan(data_panen):
     """Menampilkan ringkasan hasil panen dalam bentuk tabel sederhana."""
@@ -54,6 +66,27 @@ def tampilkan_ringkasan(data_panen):
  
     rata_rata = total / len(data_panen)
     print(f"\nRata-rata hasil panen per komoditas/lahan: {rata_rata:.2f} kg")
+ 
+    tampilkan_diskon(total)
+ 
+ 
+def tampilkan_diskon(total):
+    """Menanyakan dan menampilkan hasil perhitungan diskon (opsional)."""
+    jawaban = input("\nApakah ingin menghitung diskon dari total hasil panen? (y/n): ").strip().lower()
+    if jawaban != "y":
+        return
+ 
+    try:
+        persen_diskon = float(input("Masukkan persentase diskon (%): "))
+        nilai_diskon, total_setelah_diskon = hitung_diskon(total, persen_diskon)
+    except ValueError as e:
+        print(f"Input tidak valid: {e}")
+        return
+ 
+    print("\n=== Hasil Perhitungan Diskon ===")
+    print(f"Total sebelum diskon : {total:.2f} kg")
+    print(f"Diskon ({persen_diskon:.1f}%)      : {nilai_diskon:.2f} kg")
+    print(f"Total setelah diskon : {total_setelah_diskon:.2f} kg")
  
  
 def main():
